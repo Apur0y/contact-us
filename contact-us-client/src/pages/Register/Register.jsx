@@ -5,7 +5,8 @@ const Register = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
-    message: "",
+    password: "",
+    cpassword:""
   });
 
   const handleChange = (e) => {
@@ -14,8 +15,14 @@ const Register = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault;
-    console.log("Go sjhe");
+    e.preventDefault
+    if(formData.cpassword != formData.password){
+      console.log("Confirm Pass should same");
+    }
+    else{
+      console.log("go Ahead");
+    }
+
   };
 
   return (
@@ -27,7 +34,7 @@ const Register = () => {
           <p className="text-black text-center mt-4">
             Welcome back to CyberCreaft Bangladesh,
             <br />
-            where your creativity thrives.{" "}
+            where your creativity thrives.
           </p>
         </div>
       </div>
@@ -50,8 +57,8 @@ const Register = () => {
             <label className="block text-xs mb-2 text-[#3F5F99] ">Email</label>
             <input
               type="email"
-              name="fullName"
-              value={formData.fullName}
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               placeholder="example@gmail.com"
               className="w-full p-3 rounded-md bg-white"
@@ -63,8 +70,8 @@ const Register = () => {
             <label className="block text-xs mb-2 text-[#3F5F99]">Create a password</label>
             <input
               type="password"
-              name="fullName"
-              value={formData.fullName}
+              name="password"
+              value={formData.password}
               onChange={handleChange}
               placeholder="must be 8 characters"
               className="w-full p-3 rounded-md bg-white"
@@ -75,8 +82,8 @@ const Register = () => {
             <label className="block text-xs mb-2 text-[#3F5F99]">Confirm password</label>
             <input
               type="password"
-              name="fullName"
-              value={formData.fullName}
+              name="password"
+              value={formData.cpassword}
               onChange={handleChange}
               placeholder="repeat password"
               className="w-full p-3 rounded-md bg-white"

@@ -1,5 +1,7 @@
 require("dotenv").config();
 const express = require('express');
+const bcrypt = require('bcryptjs');
+
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
@@ -25,6 +27,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
 
+    const usersCollection = client.db("ContactInfo").collection("users");
     const infoCollection = client.db("ContactInfo").collection("userInfo");
 
     app.post("/submiteddata",async(req,res)=>{
@@ -33,6 +36,19 @@ async function run() {
       const result = await infoCollection.insertOne(data);
       res.send(result)
 
+    });
+
+    app.post('/signup', async (req, res) => {
+      const { email, password } = req.body;
+      try {
+        const existingUser = await usersCollection.findOne({ email });
+        if (existingUser) throw new Error('User already exists');
+        const hashedPassword = await bcrypt.hash(password, 10);
+        await usersCollection.insertOne({ email, password: hashedPassword });
+        res.status(201).json({ message: 'User created successfully' });
+      } catch (err) {
+        res.status(400).json({ error: err.message });
+      }
     });
 
     // Connect the client to the server	(optional starting in v4.7)
