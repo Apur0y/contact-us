@@ -3,7 +3,7 @@ import { MdNotifications } from "react-icons/md";
 
 const Navbar = () => {
   return (
-    <div className=" ">
+    <div className=" shadow-md">
       <div className="navbar w-11/12 mx-auto ">
         <div className="flex-1">
           <img src="/mainicon.png" className="w-16" alt="" />
