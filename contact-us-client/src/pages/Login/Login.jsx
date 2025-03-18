@@ -1,16 +1,16 @@
 import Lottie from "lottie-react";
 import React, { useState } from "react";
-import RegisterLottie from "../../assets/register.json";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCircleCheck } from "react-icons/fa6";
 import { MdRadioButtonUnchecked } from "react-icons/md";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    fullName: "",
     email: "",
-    message: "",
+    password: "",
   });
+
+  const navigate = useNavigate()
 
   const [remember,setRemember] = useState(true)
   const handleChange = (e) => {
@@ -19,8 +19,9 @@ const Login = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault;
-    console.log("Go sjhe");
+    e.preventDefault()
+    console.log("Go sjhe")
+navigate('/admin')
   };
 
   return (
@@ -43,7 +44,7 @@ const Login = () => {
               <label className="block text-xs mb-2 text-[#3F5F99] ">Email Address</label>
               <input
                 type="email"
-                name="fullName"
+                name="email"
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Your Email"
@@ -56,7 +57,7 @@ const Login = () => {
               <label className="block text-xs mb-2 text-[#3F5F99]">Password</label>
               <input
                 type="password"
-                name="fullName"
+                name="password"
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder="Password"
