@@ -52,6 +52,24 @@ async function run() {
       }
     });
 
+    app.post('/login', async (req, res) => {
+      const datas =req.body
+      const { email, password } = datas;
+      try {
+        const existingUsers = await usersCollection.findOne({ email });
+        if (!existingUsers) throw new Error('User Not Find!');
+        console.log("login her",password);
+        console.log("user here",existingUsers?.password);
+        const hashedPasswords = await bcrypt.compare(password, existingUsers.password);
+        if(!hashedPasswords)throw new Error('Invalid credentials');
+        const token = jwt.sign({ userId: existingUsers._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.json({ token});
+      } catch (err) {
+        res.status(400).json({ error: err.message });
+      }
+    });
+     
+
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection

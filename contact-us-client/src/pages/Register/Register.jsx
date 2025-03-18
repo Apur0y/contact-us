@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Register = () => {
@@ -10,6 +10,8 @@ const Register = () => {
     password: "",
     cpassword:""
   });
+
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,6 +33,7 @@ const Register = () => {
       .then(res=>{
         toast("Successfull")
         console.log(res.data)
+   navigate('/admin')
     })
     }
 

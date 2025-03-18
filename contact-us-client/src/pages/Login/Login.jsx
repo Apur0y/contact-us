@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCircleCheck } from "react-icons/fa6";
 import { MdRadioButtonUnchecked } from "react-icons/md";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -18,10 +20,19 @@ const Login = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault()
-    console.log("Go sjhe")
-navigate('/admin')
+
+    try{
+      const res =await axios.post('http://localhost:5000/login',formData)
+      localStorage.setItem('token',res.data.token) 
+      .then(res=>console.log(res.data)) 
+  navigate('/admin')
+    }
+    catch(err){
+      toast(err.response?.data?.error || "Invalid Credentials");
+    }
+ 
   };
 
   return (
@@ -45,7 +56,7 @@ navigate('/admin')
               <input
                 type="email"
                 name="email"
-                value={formData.fullName}
+                value={formData.email}
                 onChange={handleChange}
                 placeholder="Your Email"
                 className="w-full p-3 rounded-md bg-white"
@@ -58,7 +69,7 @@ navigate('/admin')
               <input
                 type="password"
                 name="password"
-                value={formData.fullName}
+                value={formData.password}
                 onChange={handleChange}
                 placeholder="Password"
                 className="w-full p-3 rounded-md bg-white"
