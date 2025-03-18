@@ -1,5 +1,7 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,17 +13,27 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+ 
     setFormData({ ...formData, [name]: value });
+   
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault
-    if(formData.cpassword != formData.password){
-      console.log("Confirm Pass should same");
+    e.preventDefault()
+    if(formData.password != formData.cpassword){
+      toast("Password do not match!")
+      return
     }
     else{
-      console.log("go Ahead");
+    
+
+      axios.post("http://localhost:5000/signup",formData)
+      .then(res=>{
+        toast("Successfull")
+        console.log(res.data)
+    })
     }
+
 
   };
 
@@ -82,7 +94,7 @@ const Register = () => {
             <label className="block text-xs mb-2 text-[#3F5F99]">Confirm password</label>
             <input
               type="password"
-              name="password"
+              name="cpassword"
               value={formData.cpassword}
               onChange={handleChange}
               placeholder="repeat password"

@@ -39,12 +39,13 @@ async function run() {
     });
 
     app.post('/signup', async (req, res) => {
-      const { email, password } = req.body;
+      const data =req.body
+      const { email, password } = data;
       try {
         const existingUser = await usersCollection.findOne({ email });
         if (existingUser) throw new Error('User already exists');
         const hashedPassword = await bcrypt.hash(password, 10);
-        await usersCollection.insertOne({ email, password: hashedPassword });
+        await usersCollection.insertOne(data);
         res.status(201).json({ message: 'User created successfully' });
       } catch (err) {
         res.status(400).json({ error: err.message });
