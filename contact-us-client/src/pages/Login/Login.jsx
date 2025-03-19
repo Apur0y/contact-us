@@ -25,8 +25,7 @@ const Login = () => {
 
     try{
       const res =await axios.post('http://localhost:5000/login',formData)
-      localStorage.setItem('token',res.data.token) 
-      .then(res=>console.log(res.data)) 
+      localStorage.setItem('token',res.data.token)      
   navigate('/admin')
     }
     catch(err){

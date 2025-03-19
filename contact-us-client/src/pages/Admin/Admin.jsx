@@ -1,11 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar/Navbar";
 import { PiCursorBold } from "react-icons/pi";
 import { LuDownload, LuLayoutGrid } from "react-icons/lu";
 import { IoMdAdd } from "react-icons/io";
 import { TfiReload } from "react-icons/tfi";
+import axios from "axios";
 
 const Admin = () => {
+  const [info, setInfo] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get("http://localhost:5000/submiteddata");
+        setInfo(data); // Set the fetched data to state
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  //info=0
+  // :
+  // email
+  // :
+  // "contact@gmail.com"
+  // fullName
+  // :
+  // "Apu "
+  // message
+  // :
+  // "Really good\n"
+  // _id
+  // :
+  // "67d84e4a5dfe570388c6a992"
+
+  console.log(info);
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
@@ -57,15 +89,21 @@ const Admin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="hover:bg-gray-100">
-                    <td className=" px-4 py-2">1</td>
-                    <td className=" px-4 py-2">264816</td>
-                    <td className=" px-4 py-2">Nahil</td>
-                    <td className=" px-4 py-2">na@hil.com</td>
-                    <td className=" px-4 py-2">IT</td>
-                    <td className=" px-4 py-2">Junior</td>
-                    <td className=" px-4 py-2 text-blue-600 cursor-pointer">Watch</td>
-                  </tr>
+                  {info.map((item, index) => (
+                    <tr key={item._id} className="hover:bg-gray-100">
+                      <td className="px-4 py-2">{index + 1}</td>
+                      <td className="px-4 py-2">{item._id}</td>
+                      <td className="px-4 py-2">{item.fullName}</td>
+                      <td className="px-4 py-2">{item.email}</td>
+                      <td className="px-4 py-2">-</td>{" "}
+                      {/* Department (add if available) */}
+                      <td className="px-4 py-2">-</td>{" "}
+                      {/* Designation (add if available) */}
+                      <td className="px-4 py-2 text-blue-600 cursor-pointer">
+                        Watch
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
