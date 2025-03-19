@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@thelaststand.sh6jy.mongodb.net/?retryWrites=true&w=majority&appName=thelaststand`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -40,6 +40,13 @@ async function run() {
       res.send(result);
     });
 
+    app.delete("/submiteddata/:id", async (req, res) => {
+    const id = req.params.id;
+    console.log("id here");
+      const result = await infoCollection.deleteOne({_id: new ObjectId(id)});
+      res.send(result);
+    });
+
     app.post("/signup", async (req, res) => {
       const data = req.body;
       const { email, password } = data;
@@ -60,8 +67,7 @@ async function run() {
       try {
         const existingUsers = await usersCollection.findOne({ email });
         if (!existingUsers) throw new Error("User Not Find!");
-        console.log("login her", password);
-        console.log("user here", existingUsers?.password);
+   
         if (password != existingUsers.password) {
           throw new Error("Password Incorrect")
         } else {
@@ -72,7 +78,7 @@ async function run() {
             { expiresIn: "1h" }
           );
           res.json({ token });
-          console.log("Login token", token);
+  
         }
       } catch (err) {
         res.status(400).json({ error: err.message });

@@ -1,43 +1,64 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar/Navbar";
 import { PiCursorBold } from "react-icons/pi";
-import { LuDownload, LuLayoutGrid } from "react-icons/lu";
+import { LuDownload, LuEye, LuLayoutGrid } from "react-icons/lu";
 import { IoMdAdd } from "react-icons/io";
 import { TfiReload } from "react-icons/tfi";
 import axios from "axios";
+import { MdDeleteForever } from "react-icons/md";
+import Swal from "sweetalert2";
 
 const Admin = () => {
   const [info, setInfo] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null);
 
+  const fetchData = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/submiteddata");
+      setInfo(data); // Set the fetched data to state
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data } = await axios.get("http://localhost:5000/submiteddata");
-        setInfo(data); // Set the fetched data to state
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+
 
     fetchData();
   }, []);
 
-  //info=0
-  // :
-  // email
-  // :
-  // "contact@gmail.com"
-  // fullName
-  // :
-  // "Apu "
-  // message
-  // :
-  // "Really good\n"
-  // _id
-  // :
-  // "67d84e4a5dfe570388c6a992"
+ const handleView=(item)=>{
+  setSelectedItem(item);
+  document.getElementById('my_modal_3').showModal()
+  console.log(item);
+ }
 
-  console.log(info);
+ const handleDelete =(id)=>{
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      axios.delete(`http://localhost:5000/submiteddata/${id}`)
+      .then(res=>{
+        console.log(res.data);
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+        fetchData()
+      })
+     
+    }
+  });
+  
+ }
+
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
@@ -95,12 +116,26 @@ const Admin = () => {
                       <td className="px-4 py-2">{item._id}</td>
                       <td className="px-4 py-2">{item.fullName}</td>
                       <td className="px-4 py-2">{item.email}</td>
-                      <td className="px-4 py-2">-</td>{" "}
-                      {/* Department (add if available) */}
-                      <td className="px-4 py-2">-</td>{" "}
-                      {/* Designation (add if available) */}
-                      <td className="px-4 py-2 text-blue-600 cursor-pointer">
-                        Watch
+                      <td className="px-4 py-2">{item?.department || "IT"}</td>
+
+                      <td className="px-4 py-2">
+                        {item?.designation || "Developer"}
+                      </td>
+
+                      <td className="px-4 py-2 text-blue-600 ">
+                        <div className="flex gap-3">
+                          <button>
+                          <LuDownload className="cursor-pointer size-5 hover:bg-gray-300 rounded-full  " />
+                          </button>
+                          <button onClick={()=>handleView(item)}>
+                          <LuEye className="text-green-600 cursor-pointer size-5 hover:bg-gray-300 rounded-full " />
+                          </button>
+                         <button onClick={()=>handleDelete(item._id)}>
+                         <MdDeleteForever className="text-red-600 cursor-pointer size-5 hover:bg-gray-300 rounded-full " />
+                         </button>
+                          
+                        
+                        </div>
                       </td>
                     </tr>
                   ))}
@@ -110,6 +145,34 @@ const Admin = () => {
           </div>
         </div>
       </div>
+
+      {/* You can open the modal using document.getElementById('ID').showModal() method */}
+
+<dialog id="my_modal_3" className="modal ">
+  <div className="modal-box bg-white text-black">
+    <form method="dialog">
+      {/* if there is a button in form, it will close the modal */}
+      <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+    </form>
+    {selectedItem && (
+      <div className="bg-gray-100 p-6 rounded-lg shadow-lg">
+  <h3 className="text-xl font-semibold text-gray-800 mb-3">
+    {selectedItem.fullName}
+  </h3>
+  <div className="bg-white p-4 rounded-md shadow-sm">
+    <p className="text-gray-600">
+      <span className="font-medium text-gray-800">📧 Email:</span> {selectedItem.email}
+    </p>
+    <p className="text-gray-600 mt-2">
+      <span className="font-medium text-gray-800">💬 Message:</span> {selectedItem.message}
+    </p>
+  </div>
+</div>
+
+)}
+
+  </div>
+</dialog>
     </div>
   );
 };

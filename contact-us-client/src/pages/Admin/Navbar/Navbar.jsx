@@ -1,6 +1,6 @@
 import React from "react";
 import { MdNotifications } from "react-icons/md";
-
+import { motion } from "framer-motion";
 const Navbar = () => {
   return (
     <div className=" shadow-md">
@@ -12,9 +12,19 @@ const Navbar = () => {
           <input
             type="text"
             placeholder="Search"
-            className="input input-bordered w-24 md:w-auto"
+            className="input text-black input-bordered bg-white border  border-gray-700 md:w-96"
           />
-          <MdNotifications className="my-auto mr-6 text-[#3F5F99] size-6" />
+          <motion.div
+            whileHover={{ rotate: [0, -10, 10, -10, 10, 0] }} // Bell shaking effect
+            transition={{ duration: 0.5, repeat: Infinity, repeatType: "loop" }} // Smooth looping
+            className="my-auto mr-6 text-[#3F5F99] size-6 cursor-pointer"
+          >
+            <MdNotifications className="size-6" />
+          </motion.div>
+          <div className="text-black">
+            <h1 className=" font-semibold">{name || "Jonh Snow"}</h1>
+            <p className="text-sm">Admin</p>
+          </div>
           <div className="dropdown dropdown-end">
             <div
               tabIndex={0}
@@ -24,7 +34,9 @@ const Navbar = () => {
               <div className="w-10 rounded-full">
                 <img
                   alt="Tailwind CSS Navbar component"
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                  src={
+                    "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                  }
                 />
               </div>
             </div>

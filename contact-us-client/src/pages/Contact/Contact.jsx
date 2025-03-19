@@ -2,6 +2,7 @@ import Lottie from "lottie-react";
 import React, { useState } from "react";
 import RegisterLottie from "../../assets/register.json";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -26,60 +27,81 @@ const Contact = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        console.log(data)
+        Swal.fire({
+          title: "Submited",
+          text: "Your message are stored",
+          icon: "success"
+        });
+        setFormData({
+          fullName: "",
+          email: "",
+          message: "",
+        })
       });
   };
 
   return (
     <div className="bg-[#E2ECFF] min-h-screen flex justify-around items-center">
-      <div>
+      <div className="fixed w-[1800px] ml-64 mt-64 mb-32  bg-[#3F5F99] h-[800px] rotate-125"> </div>
+      <div className="z-40">
+      
         <div>
-          <img src="/mainicon.png" alt="" />
-          <p className="text-black">
+          <img src="/mainicon.png" className="w-xs" alt="" />
+          <p className="text-black text-center mt-4">
             Welcome back to CyberCreaft Bangladesh,
             <br />
-            where your creativity thrives.{" "}
+            where your creativity thrives.
           </p>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-4 text-black">
+     
+        <form onSubmit={handleSubmit} className="space-y-4 z-30 text-black">
+         
+
           <div>
-            <label className="block text-sm font-medium">Full Name:</label>
-            <input
-              type="text"
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
+              <label className="block text-xs mb-2 text-[#3F5F99] ">Full Name:</label>
+              <input
+                type="text"
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                className="w-full p-3 rounded-md bg-white"
+                required
+              />
+            </div>
+
           <div>
-            <label className="block text-sm font-medium">Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
+              <label className="block text-xs mb-2 text-[#3F5F99] ">Email Address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Your Email"
+                className="w-full p-3 rounded-md bg-white"
+                required
+              />
+            </div>
+        
+
+
           <div>
-            <label className="block text-sm font-medium">Message:</label>
-            <textarea
-              name="message"
-              value={formData.message}
-              onChange={handleChange}
-              placeholder="Enter your message"
-              className="w-full p-2 border rounded"
-              required
-            />
-          </div>
+              <label className="block text-xs mb-2 text-[#3F5F99] ">Message</label>
+              <textarea
+               
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
+                placeholder="Enter your message"
+                className="w-full p-3 rounded-md bg-white"
+                required
+              />
+            </div>
+
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+            className="w-full bg-[#2f4774] text-white p-2 rounded hover:bg-blue-700"
           >
             Submit
           </button>
