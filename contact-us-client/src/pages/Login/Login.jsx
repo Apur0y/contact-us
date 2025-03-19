@@ -1,10 +1,11 @@
 import Lottie from "lottie-react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCircleCheck } from "react-icons/fa6";
 import { MdRadioButtonUnchecked } from "react-icons/md";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../AuthProvider/Authprovider";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const Login = () => {
     password: "",
   });
 
+  const {login} =useContext(AuthContext)
   const navigate = useNavigate()
 
   const [remember,setRemember] = useState(true)
@@ -25,7 +27,10 @@ const Login = () => {
 
     try{
       const res =await axios.post('http://localhost:5000/login',formData)
-      localStorage.setItem('token',res.data.token)      
+      localStorage.setItem('token',res.data.token)
+      // localStorage.setItem('name',res.data.existingUsers)
+      console.log("object,", res.data.existingUsers);
+    login(res.data.existingUsers)
   navigate('/admin')
     }
     catch(err){
