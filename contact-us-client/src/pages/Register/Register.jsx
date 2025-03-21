@@ -29,7 +29,7 @@ const Register = () => {
     else{
     
 
-      axios.post("http://localhost:5000/signup",formData)
+      axios.post("https://contact-us-server-sigma.vercel.app/signup",formData)
       .then(res=>{
         toast("Successfull")
         console.log(res.data)
@@ -41,8 +41,8 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-[#E2ECFF] min-h-screen flex justify-center items-center">
-    <div className="bg-gradient-to-br from-[#bfd7fd] to-[#e9f1ff] shadow-md  rounded-lg flex justify-around  items-center  w-3/5 h-[600px]">
+    <div className="bg-[#E2ECFF] min-h-screen flex md:justify-center md:items-center">
+    <div className="bg-gradient-to-br from-[#bfd7fd] to-[#e9f1ff] md:shadow-md px-32 py-12 md:p-1  rounded-lg flex flex-col md:flex-row justify-around  items-center  md:w-3/5 md:h-[600px]">
       <div>
         <div>
           <img src="/mainicon.png" className="w-xs" alt="" />

@@ -26,7 +26,7 @@ const Login = () => {
     e.preventDefault()
 
     try{
-      const res =await axios.post('http://localhost:5000/login',formData)
+      const res =await axios.post('https://contact-us-server-sigma.vercel.app/login',formData)
       localStorage.setItem('token',res.data.token)
       // localStorage.setItem('name',res.data.existingUsers)
       console.log("object,", res.data.existingUsers);
@@ -40,9 +40,9 @@ const Login = () => {
   };
 
   return (
-    <div className="bg-[#E2ECFF] min-h-screen flex justify-center items-center">
-      <div className="bg-gradient-to-br from-[#bfd7fd] to-[#e9f1ff] shadow-md rounded-lg flex justify-around  items-center  w-3/5 h-[500px]">
-        <div>
+    <div className="bg-[#E2ECFF] md:min-h-screen flex md:justify-center md:items-center ">
+      <div className="bg-gradient-to-br from-[#bfd7fd] to-[#e9f1ff] md:shadow-md rounded-lg px-32 py-12 md:p-1 flex flex-col md:flex-row md:justify-around  items-center  md:w-3/5 md:h-[500px]">
+       
           <div>
             <img src="/mainicon.png" className="w-xs" alt="" />
             <p className="text-black text-center mt-4">
@@ -51,10 +51,10 @@ const Login = () => {
               where your creativity thrives.{" "}
             </p>
           </div>
-        </div>
+        
 
         <div>
-          <form onSubmit={handleSubmit} className="space-y-5 w-sm text-black">
+          <form onSubmit={handleSubmit} className="space-y-5 w-64 mt-5 md:w-sm text-black">
             <div>
               <label className="block text-xs mb-2 text-[#3F5F99] ">Email Address</label>
               <input
@@ -63,7 +63,7 @@ const Login = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Your Email"
-                className="w-full p-3 rounded-md bg-white"
+                className="w-full p-3 rounded-md bg-white text-black"
                 required
               />
             </div>
@@ -91,7 +91,7 @@ const Login = () => {
                  <p>Remember me</p>
             </div>
     
-            <Link >
+            <Link to='/'>
             <button className="hover:underline cursor-grab">Forgot password?</button>
             </Link>
             

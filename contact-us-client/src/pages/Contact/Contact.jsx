@@ -1,7 +1,7 @@
 import Lottie from "lottie-react";
 import React, { useState } from "react";
 import RegisterLottie from "../../assets/register.json";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const Contact = () => {
@@ -11,6 +11,8 @@ const Contact = () => {
     message: "",
   });
 
+  const navigate = useNavigate()
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -18,7 +20,7 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/submiteddata", {
+    fetch("https://contact-us-server-sigma.vercel.app/submiteddata", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -38,16 +40,18 @@ const Contact = () => {
           email: "",
           message: "",
         })
+        navigate('/thanks')
       });
+      
   };
 
   return (
-    <div className="bg-[#E2ECFF] min-h-screen flex justify-around items-center">
-      <div className="fixed w-[1800px] ml-64 mt-64 mb-32  bg-[#3F5F99] h-[800px] rotate-125"> </div>
+    <div className="bg-[#E2ECFF] min-h-screen flex flex-col-reverse md:flex-row justify-around items-center">
+      <div className="fixed w-[1800px] ml-64 mt-64 mb-32 bg-[#6c9fff]  lg:bg-[#3F5F99] h-[800px] rotate-125"> </div>
       <div className="z-40">
       
-        <div>
-          <img src="/mainicon.png" className="w-xs" alt="" />
+        <div className="flex items-center flex-col">
+          <img src="/mainicon.png" className="md:w-xs w-44" alt="" />
           <p className="text-black text-center mt-4">
             Welcome back to CyberCreaft Bangladesh,
             <br />
@@ -114,7 +118,7 @@ const Contact = () => {
 
       <div>
         <Lottie
-          className="size-100"
+          className="md:size-100 size-44"
           animationData={RegisterLottie}
           loop={true}
         />

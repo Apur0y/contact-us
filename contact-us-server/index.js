@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const bcrypt = require("bcryptjs");
-
+const PDFDocument = require('pdfkit');
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
@@ -83,6 +83,29 @@ async function run() {
       } catch (err) {
         res.status(400).json({ error: err.message });
       }
+    });
+
+    app.get('/download-pdf', async (req, res) => {
+      const submissionsCollection = infoCollection;
+      const submissions = await submissionsCollection.find().toArray();
+    
+      const doc = new PDFDocument();
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'attachment; filename=submissions.pdf');
+    
+      submissions.forEach((submission, index) => {
+        if (index > 0) {
+          doc.addPage();
+        }
+        doc.fontSize(16).text('Submission Details', { underline: true });
+        doc.moveDown();
+        doc.fontSize(12).text(`Name: ${submission.fullName || 'N/A'}`);
+        doc.text(`Email: ${submission.email || 'N/A'}`);
+        doc.text(`Message: ${submission.message || 'N/A'}`);
+      });
+    
+      doc.pipe(res);
+      doc.end();
     });
 
     // Connect the client to the server	(optional starting in v4.7)
