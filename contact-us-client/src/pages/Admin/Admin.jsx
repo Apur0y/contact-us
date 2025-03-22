@@ -13,8 +13,12 @@ import jsPDF from "jspdf";
 const Admin = () => {
   const [info, setInfo] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [checkbox, setCheckbox] = useState(true);
+
   const printRef = useRef(null);
 
+  console.log(selectedItems);
   const fetchData = async () => {
     try {
       const { data } = await axios.get(
@@ -29,25 +33,41 @@ const Admin = () => {
     fetchData();
   }, []);
 
+  const handleSelctor = () => {
+    setCheckbox(!checkbox);
+  };
+
+  const handleCheckboxChange = (itemId) => {
+    setSelectedItems((prevSelectedItems) => {
+      if (prevSelectedItems.includes(itemId)) {
+        // Deselect the item
+        return prevSelectedItems.filter((id) => id !== itemId);
+      } else {
+        // Select the item
+        return [...prevSelectedItems, itemId];
+      }
+    });
+  };
+
   const handleView = (item) => {
     setSelectedItem(item);
     document.getElementById("my_modal_3").showModal();
     console.log(item);
   };
 
-  const handleDownload = async() => {
+  const handleDownload = async () => {
     const element = printRef.current;
-    if(!element){
+    if (!element) {
       return;
     }
-  
+
     // Create a clone of the element to modify before rendering
     const clone = element.cloneNode(true);
-    const tempDiv = document.createElement('div');
+    const tempDiv = document.createElement("div");
     tempDiv.appendChild(clone);
-    
+
     // Apply a style to force standard RGB colors
-    const styles = document.createElement('style');
+    const styles = document.createElement("style");
     styles.textContent = `
       * {
         color: black !important;
@@ -57,31 +77,31 @@ const Admin = () => {
       }
     `;
     clone.appendChild(styles);
-    
+
     // Position off-screen for rendering
-    tempDiv.style.position = 'absolute';
-    tempDiv.style.left = '-9999px';
+    tempDiv.style.position = "absolute";
+    tempDiv.style.left = "-9999px";
     document.body.appendChild(tempDiv);
-  
+
     try {
       const canvas = await html2canvas(clone, {
         logging: false,
         useCORS: true,
-        backgroundColor: '#ffffff'
+        backgroundColor: "#ffffff",
       });
-      
+
       const data = canvas.toDataURL("image/png");
-      
+
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "px",
-        format: "a4"
+        format: "a4",
       });
-      
+
       const imgProperties = pdf.getImageProperties(data);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
-      
+
       pdf.addImage(data, "PNG", 0, 0, pdfWidth, pdfHeight);
       pdf.save("employee_details.pdf");
     } finally {
@@ -89,8 +109,6 @@ const Admin = () => {
       document.body.removeChild(tempDiv);
     }
   };
-
-
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -129,9 +147,20 @@ const Admin = () => {
           <div className="flex  justify-between text-black md:mx-11">
             <h1 className="text-3xl">Employee</h1>
             <div className="flex gap-5 text-[#3F5F99]">
-              <div className="border-2 rounded-sm p-2">
-                <PiCursorBold className="md:size-6" />
-              </div>
+              {checkbox ? (
+                <div className="border-2 rounded-sm p-2">
+                  <button onClick={() => handleSelctor()}>
+                    <PiCursorBold className="md:size-6" />
+                  </button>
+                </div>
+              ) : (
+                <div className="border-2 bg-gray-900 rounded-sm p-2">
+                  <button onClick={() => handleSelctor()}>
+                    <PiCursorBold className="md:size-6" />
+                  </button>
+                </div>
+              )}
+
               <div className="border-2 rounded-sm p-2">
                 <LuLayoutGrid className="md:size-6" />
               </div>
@@ -161,6 +190,8 @@ const Admin = () => {
               <table className="table-auto md:w-full border-collapse ">
                 <thead className="border-b border-gray-600">
                   <tr className="text-left">
+                    {checkbox ? "" : <th className="px-4 py-2"></th>}
+
                     <th className=" px-4 py-2">No.</th>
                     <th className=" px-4 py-2">Employee Id</th>
                     <th className=" px-4 py-2">Name</th>
@@ -173,6 +204,18 @@ const Admin = () => {
                 <tbody>
                   {info.map((item, index) => (
                     <tr key={item._id} className="hover:bg-gray-100">
+                      {checkbox ? (
+                        ""
+                      ) : (
+                        <td className="px-4 py-2">
+                          <input
+                            type="checkbox"
+                            checked={selectedItems.includes(item._id)}
+                            onChange={() => handleCheckboxChange(item._id)} // Handle checkbox change
+                          />
+                        </td>
+                      )}
+
                       <td className="px-4 py-2">{index + 1}</td>
                       <td className="px-4 py-2">{item._id}</td>
                       <td className="px-4 py-2">{item.fullName}</td>
@@ -216,7 +259,10 @@ const Admin = () => {
             </button>
           </form>
           {selectedItem && (
-            <div ref={printRef} className="bg-gray-100 p-6 rounded-lg shadow-lg">
+            <div
+              ref={printRef}
+              className="bg-gray-100 p-6 rounded-lg shadow-lg"
+            >
               <h3 className="text-xl font-semibold text-gray-800 mb-3">
                 {selectedItem?.fullName}
               </h3>

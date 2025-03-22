@@ -33,7 +33,7 @@ const Navbar = () => {
             <MdNotifications className="size-6" />
           </motion.div>
           <div className="text-black">
-            <h1 className=" font-semibold">{user.fullName || "Jonh Snow"}</h1>
+            <h1 className=" font-semibold">{user?.fullName || "Jonh Snow"}</h1>
             <p className="text-sm">Admin</p>
           </div>
           <div className="dropdown dropdown-end">

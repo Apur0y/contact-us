@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import GoogleBtn from "./GoogleBtn/GoogleBtn";
+
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +14,7 @@ const Register = () => {
   });
 
   const navigate = useNavigate()
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -121,8 +124,11 @@ const Register = () => {
           <Link to='/login'>
           <button className="text-[#3F5F99] ml-1 font-semibold hover:underline">Log in</button>
           </Link>
-         
+       
         </div>
+      
+         <GoogleBtn></GoogleBtn>
+         {/* <FacebookBtn></FacebookBtn> */}
       </div>
     </div>
     
