@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { MdNotifications } from "react-icons/md";
 import { motion } from "framer-motion";
 import { AuthContext } from "../../../AuthProvider/Authprovider";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Navbar = () => {
 
   const {user}= useContext(AuthContext)
@@ -16,9 +16,13 @@ const Navbar = () => {
   return (
     <div className=" shadow-md">
       <div className="navbar w-11/12 mx-auto ">
-        <div className="w-full md:flex-1">
+      <div className="w-full md:flex-1">
+    <Link to='/'>
+    
           <img src="/mainicon.png" className="w-16" alt="" />
-        </div>
+        
+    </Link>
+    </div>
         <div className="flex gap-2">
           <input
             type="text"

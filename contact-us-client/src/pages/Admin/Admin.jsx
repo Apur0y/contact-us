@@ -10,11 +10,14 @@ import Swal from "sweetalert2";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
+import { toast } from "react-toastify";
+
 const Admin = () => {
   const [info, setInfo] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [selectedItems, setSelectedItems] = useState([]);
   const [checkbox, setCheckbox] = useState(true);
+  const [social,setSocial]=useState(false)
 
   const printRef = useRef(null);
 
@@ -36,6 +39,22 @@ const Admin = () => {
   const handleSelctor = () => {
     setCheckbox(!checkbox);
   };
+
+  const handleSocial=()=>{
+    setSocial(!social)
+  }
+
+  function copyLink() {
+    navigator.clipboard.writeText("https://contact-us-client.vercel.app/").then(() => {
+      toast("Link copied to clipboard!");
+    });
+  }
+
+  const handleReload=()=>{
+    fetchData();
+    window.location.reload(); 
+  }
+
 
   const handleCheckboxChange = (itemId) => {
     setSelectedItems((prevSelectedItems) => {
@@ -165,10 +184,26 @@ const Admin = () => {
                 <LuLayoutGrid className="md:size-6" />
               </div>
               <div className="border-2 rounded-sm p-2">
+                <button >
                 <LuDownload className="md:size-6" />
+
+                </button>
               </div>
               <div className="border-2 rounded-sm p-2">
-                <IoMdAdd className="md:size-6" />
+                
+                <button onClick={()=>handleSocial()}>
+                <IoMdAdd className="md:size-6 cursor-pointer" />
+                </button>
+                {
+                  social?    (<div class="social-sharing flex flex-col md:flex-row gap-2">
+                  <a className="bg-blue-700 text-white p-1 rounded-md" href="https://www.facebook.com/sharer/sharer.php?u=https://contact-us-client.vercel.app" target="_blank"> Facebook</a>
+                  <a className="bg-black text-white p-1  rounded-md" href="https://twitter.com/intent/tweet?url=https://contact-us-client.vercel.app&text=Get%20in%20touch%20with%20us!" target="_blank"> X</a>
+                  <a className="bg-red-800 text-white p-1  rounded-md" href="mailto:?subject=Contact%20Us&body=Check%20out%20this%20page:%20https://contact-us-client.vercel.app" target="_blank"> Email</a>
+                  <button className="bg-amber-600 text-white p-1  rounded-md" onClick={()=>copyLink()}> Copy Link</button>
+                </div>):(<div></div>)
+                }
+             
+ 
               </div>
             </div>
           </div>
@@ -181,9 +216,14 @@ const Admin = () => {
                   placeholder="Search"
                   className="border px-2 py-1 w-24 md:w-auto"
                 />
+                <button onClick={()=>handleReload()}>
                 <div className="border-2 border-blue-900 rounded-sm p-2">
-                  <TfiReload className="my-auto text-[#3F5F99] md:size-6" />
+                  
+                  <TfiReload className="my-auto cursor-pointer text-[#3F5F99] md:size-6" />
+                
+                
                 </div>
+                </button>
               </div>
             </div>
             <div className="overflow-x-auto">
@@ -280,6 +320,8 @@ const Admin = () => {
           )}
         </div>
       </dialog>
+
+     
     </div>
   );
 };
